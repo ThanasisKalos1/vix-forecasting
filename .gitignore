@@ -3,3 +3,8 @@ data/processed/*.csv
 .venv/
 __pycache__/
 .ipynb_checkpoints/
+
+# Generated presentation assets
+presentation/node_modules/
+presentation/output/
+presentation/scratch/
