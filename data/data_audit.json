@@ -1,0 +1,84 @@
+﻿{
+    "source_url":  "https://cdn-api.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+    "source_page":  "https://www.cboe.com/tradable-products/vix/vix-historical-data/",
+    "raw_file_last_write_utc":  "2026-10-13T01:21:00.8880145Z",
+    "raw_sha256":  "51EA1E59BFEAF400F6816300C39145DF5E3FB437E7C60BDB8CA2178F8C96F436",
+    "processed_sha256":  "4EB6697FA671D3A1DC53049360204C26E79B6022DDF4410DAFA51AB7BB542F95",
+    "source_rows":  9291,
+    "source_sample_rows":  2793,
+    "sample_rows":  2766,
+    "first_date":  "2015-01-02",
+    "last_date":  "2025-12-31",
+    "duplicate_dates":  0,
+    "invalid_or_missing_sample_closes":  0,
+    "weekend_observations":  0,
+    "source_sample_was_sorted":  true,
+    "absent_weekdays":  77,
+    "calendar_status":  "Reconciled to frozen XNYS calendar; all expected sessions present; early closes retained.",
+    "calendar":  {
+                     "calendar":  "XNYS",
+                     "implementation":  "exchange_calendars",
+                     "version":  "4.13.2",
+                     "implementation_source":  "https://github.com/gerrymanoim/exchange_calendars",
+                     "start":  "2015-01-01",
+                     "end":  "2025-12-31",
+                     "sessions":  2766,
+                     "sha256":  "B2C0A80D4F6245C76A983888C81C0B9460CC48134D51677A8217C61C254A55BF",
+                     "policy":  "Keep all NYSE regular-session dates, including early closes. This library-generated calendar is not an exchange-issued dataset."
+                 },
+    "excluded_non_session_rows":  27,
+    "missing_expected_sessions":  0,
+    "transformations":  [
+                            "Filter 2015-01-01 through 2025-12-31 inclusive",
+                            "Keep XNYS regular-session dates including early closes",
+                            "Select DATE and CLOSE",
+                            "Rename date and vix_close",
+                            "ISO dates; ascending order; preserve observed closing values"
+                        ],
+    "counts_by_year":  [
+                           {
+                               "year":  "2015",
+                               "observations":  252
+                           },
+                           {
+                               "year":  "2016",
+                               "observations":  252
+                           },
+                           {
+                               "year":  "2017",
+                               "observations":  251
+                           },
+                           {
+                               "year":  "2018",
+                               "observations":  251
+                           },
+                           {
+                               "year":  "2019",
+                               "observations":  252
+                           },
+                           {
+                               "year":  "2020",
+                               "observations":  253
+                           },
+                           {
+                               "year":  "2021",
+                               "observations":  252
+                           },
+                           {
+                               "year":  "2022",
+                               "observations":  251
+                           },
+                           {
+                               "year":  "2023",
+                               "observations":  250
+                           },
+                           {
+                               "year":  "2024",
+                               "observations":  252
+                           },
+                           {
+                               "year":  "2025",
+                               "observations":  250
+                           }
+                       ]
+}

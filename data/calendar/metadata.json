@@ -1,0 +1,11 @@
+{
+  "calendar": "XNYS",
+  "implementation": "exchange_calendars",
+  "version": "4.13.2",
+  "implementation_source": "https://github.com/gerrymanoim/exchange_calendars",
+  "start": "2015-01-01",
+  "end": "2025-12-31",
+  "sessions": 2766,
+  "sha256": "B2C0A80D4F6245C76A983888C81C0B9460CC48134D51677A8217C61C254A55BF",
+  "policy": "Keep all NYSE regular-session dates, including early closes. This library-generated calendar is not an exchange-issued dataset."
+}
