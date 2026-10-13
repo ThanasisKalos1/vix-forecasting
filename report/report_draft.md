@@ -3,7 +3,7 @@
 
 Independent research project
 
-**Working research draft — updated 13 October 2026.** This document contains the research motivation, completed data preparation, exploratory analysis of the training period and the fixed evaluation protocol. No models have been fitted and no forecast results are available.
+**Working research draft — updated 13 October 2026.** This document contains the research motivation, completed data preparation, exploratory analysis of the training period, the fixed evaluation protocol and model selection on the validation period. The test period has not been evaluated, so no out-of-sample results are available.
 
 ## 1. Introduction
 
@@ -164,9 +164,26 @@ To address the secondary research question, test days are ranked by the size of 
 
 Variables other than the history of the VIX (for example S&P 500 returns), transformations of the target, horizons beyond one session and any assessment of trading profitability are excluded. Adding external variables would be a separate experiment with its own protocol.
 
-## 5. Remaining report sections
+## 5. Model selection on the validation period
 
-The literature review will be developed from verified forecasting and VIX research. Model diagnostics, empirical results, discussion, conclusion and abstract will be written after the relevant work is completed. No performance claims are available at this stage.
+Each candidate forecast all 501 validation dates under the schedule in Section 4.2. The code and the full tables are in the [model selection notebook](../notebooks/02_model_selection.ipynb); the validation errors of every candidate are in [`results/validation_candidates.csv`](../results/validation_candidates.csv). The test period was not loaded at this stage.
+
+| Forecast | RMSE | MAE | RMSE relative to naive | MAE relative to naive |
+|---|---|---|---|---|
+| Naive | 1.4279 | 1.0335 | 1.000 | 1.000 |
+| HAR regression | 1.4220 | 1.0105 | 0.996 | 0.978 |
+| ARIMA(1,0,0), selected | 1.4221 | 1.0124 | 0.996 | 0.980 |
+| Random Forest, selected | 1.4193 | 1.0214 | 0.994 | 0.988 |
+
+**ARIMA.** All 18 candidates were estimated without a failed re-estimation. ARIMA(1,0,0), an autoregression of order one around a constant mean, has the lowest RMSE and is the only candidate below the naive forecast on that measure. Among the differenced candidates the best is ARIMA(0,1,0), which is the naive forecast itself; every additional term makes it slightly worse. Candidates without an autoregressive term are far worse, at 1.9 to 4.6 times the naive RMSE.
+
+**Random Forest.** The selected configuration predicts the next change from the three HAR inputs, with at least 50 observations per leaf and one feature considered at each split. Predicting the change is clearly better than predicting the level: all twelve level-target candidates are worse than naive, by 4.6% to 48%. Larger leaves are consistently better, and the extended feature set does not improve on the HAR inputs. Only the selected configuration, out of 24, has a lower RMSE than the naive forecast.
+
+**Interpretation.** On the validation period the four forecasts are almost indistinguishable: their RMSE values lie within 0.6% of one another. The selected ARIMA and Random Forest configurations were chosen because they had the lowest validation error among 18 and 24 candidates, so their validation errors are optimistic and margins of this size may not persist. No significance test is applied here; testing is reserved for the test period, where the selection is already fixed.
+
+## 6. Remaining report sections
+
+The literature review will be developed from verified forecasting and VIX research. Residual diagnostics, test-period results, discussion, conclusion and abstract will be written after the relevant work is completed. No performance claims are available at this stage.
 
 ## References
 
@@ -190,4 +207,5 @@ The literature review will be developed from verified forecasting and VIX resear
 - 13 October: downloaded the source data, validated values and reconciled the sample to regular US equity sessions.
 - 13 October: completed exploratory analysis of the training period (levels, daily changes, stationarity tests, autocorrelation).
 - 13 October: fixed the evaluation protocol (models, candidate settings, re-estimation schedule, selection rule and statistical comparison) before fitting any model.
-- Pending: literature review, model fitting, validation-period selection and test evaluation.
+- 13 October: evaluated all ARIMA and Random Forest candidates on the validation period and fixed the selected configurations.
+- Pending: test evaluation, statistical comparison, error-concentration analysis and literature review.

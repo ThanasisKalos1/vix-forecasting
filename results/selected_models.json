@@ -1,0 +1,15 @@
+{
+  "selected_on": "validation period, 2022-01-03 to 2023-12-29",
+  "criterion": "lowest validation RMSE",
+  "arima": {
+    "p": 1,
+    "d": 0,
+    "q": 0
+  },
+  "random_forest": {
+    "target": "change",
+    "features": "har",
+    "min_samples_leaf": 50,
+    "split_features": "third"
+  }
+}

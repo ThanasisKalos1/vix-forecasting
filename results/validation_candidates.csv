@@ -1,0 +1,45 @@
+family,candidate,RMSE,MAE,RMSE / naive
+ARIMA,"ARIMA(0,0,0)",6.528013,5.194713,4.571734
+ARIMA,"ARIMA(0,0,1)",3.75358,2.947424,2.628728
+ARIMA,"ARIMA(0,0,2)",2.74611,2.09617,1.923171
+ARIMA,"ARIMA(1,0,0)",1.4221,1.012392,0.995933
+ARIMA,"ARIMA(1,0,1)",1.431325,1.016315,1.002393
+ARIMA,"ARIMA(1,0,2)",1.44444,1.025797,1.011578
+ARIMA,"ARIMA(2,0,0)",1.436602,1.020485,1.006089
+ARIMA,"ARIMA(2,0,1)",1.437374,1.02084,1.00663
+ARIMA,"ARIMA(2,0,2)",1.444727,1.025652,1.011779
+ARIMA,"ARIMA(0,1,0)",1.427907,1.033473,1.0
+ARIMA,"ARIMA(0,1,1)",1.437091,1.034541,1.006431
+ARIMA,"ARIMA(0,1,2)",1.448228,1.042587,1.014231
+ARIMA,"ARIMA(1,1,0)",1.442624,1.038393,1.010306
+ARIMA,"ARIMA(1,1,1)",1.443225,1.038986,1.010728
+ARIMA,"ARIMA(1,1,2)",1.448347,1.042649,1.014314
+ARIMA,"ARIMA(2,1,0)",1.443677,1.039395,1.011044
+ARIMA,"ARIMA(2,1,1)",1.444836,1.040237,1.011856
+ARIMA,"ARIMA(2,1,2)",1.462064,1.053923,1.023921
+Random Forest,"RF(level, har, leaf=5, split=third)",1.540508,1.102898,1.078857
+Random Forest,"RF(level, har, leaf=5, split=all)",1.601324,1.141916,1.121448
+Random Forest,"RF(level, har, leaf=20, split=third)",1.543834,1.118506,1.081187
+Random Forest,"RF(level, har, leaf=20, split=all)",1.513857,1.086458,1.060193
+Random Forest,"RF(level, har, leaf=50, split=third)",1.900726,1.337279,1.331127
+Random Forest,"RF(level, har, leaf=50, split=all)",2.110637,1.301026,1.478133
+Random Forest,"RF(level, extended, leaf=5, split=third)",1.493516,1.074572,1.045947
+Random Forest,"RF(level, extended, leaf=5, split=all)",1.601456,1.151392,1.12154
+Random Forest,"RF(level, extended, leaf=20, split=third)",1.520333,1.088393,1.064728
+Random Forest,"RF(level, extended, leaf=20, split=all)",1.534544,1.107522,1.074681
+Random Forest,"RF(level, extended, leaf=50, split=third)",1.674686,1.194898,1.172826
+Random Forest,"RF(level, extended, leaf=50, split=all)",2.114039,1.307328,1.480515
+Random Forest,"RF(change, har, leaf=5, split=third)",1.45894,1.06552,1.021733
+Random Forest,"RF(change, har, leaf=5, split=all)",1.528668,1.11112,1.070565
+Random Forest,"RF(change, har, leaf=20, split=third)",1.430505,1.033419,1.001819
+Random Forest,"RF(change, har, leaf=20, split=all)",1.456624,1.054006,1.020111
+Random Forest,"RF(change, har, leaf=50, split=third)",1.419339,1.021409,0.993999
+Random Forest,"RF(change, har, leaf=50, split=all)",1.428622,1.034954,1.0005
+Random Forest,"RF(change, extended, leaf=5, split=third)",1.469311,1.05195,1.028996
+Random Forest,"RF(change, extended, leaf=5, split=all)",1.495249,1.06414,1.047161
+Random Forest,"RF(change, extended, leaf=20, split=third)",1.444562,1.039165,1.011664
+Random Forest,"RF(change, extended, leaf=20, split=all)",1.465796,1.053414,1.026534
+Random Forest,"RF(change, extended, leaf=50, split=third)",1.43126,1.033591,1.002348
+Random Forest,"RF(change, extended, leaf=50, split=all)",1.442199,1.042387,1.010009
+Reference,Naive,1.427907,1.033473,1.0
+Reference,HAR,1.421959,1.010529,0.995834

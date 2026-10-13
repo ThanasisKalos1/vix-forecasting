@@ -23,7 +23,7 @@ The source can change. SHA-256 hashes and the raw file timestamp identify the lo
 
 Raw and processed data are local and excluded from Git by default. The repository publishes retrieval instructions and audit metadata; it does not assign a licence to Cboe data.
 
-The report's training/validation/test dates were fixed on 13 October 2026, before any model was fitted. Structural validation is not model selection. No forecasts or performance results have been produced.
+The report's training/validation/test dates were fixed on 13 October 2026, before any model was fitted. Structural validation is not model selection. Model selection has used the training and validation periods only; the test period has not been evaluated.
 
 ## Calendar policy — 13 October 2026
 

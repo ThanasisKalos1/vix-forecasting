@@ -2,6 +2,7 @@ data/raw/*.csv
 data/processed/*.csv
 .venv/
 __pycache__/
+.pytest_cache/
 .ipynb_checkpoints/
 
 # Generated presentation assets

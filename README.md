@@ -4,15 +4,16 @@ An independent research project comparing ARIMA, Random Forest and a naive bench
 
 ## Current status
 
-Data downloaded from Cboe and reconciled on 13 October 2026: 2,766 observations, 2015-01-02 to 2025-12-31, matching the frozen NYSE (XNYS) regular-session calendar. All expected sessions are present, including early closes. The original extract contains 2,793 rows; 27 non-session dates were excluded from modelling and logged. Exploratory analysis of the training period (2015–2021) is complete, and the evaluation protocol (models, candidate settings, selection rule and statistical tests) was fixed on the same date, before any model was fitted. No models have been fitted and no forecast performance claims are available.
+Data downloaded from Cboe and reconciled on 13 October 2026: 2,766 observations, 2015-01-02 to 2025-12-31, matching the frozen NYSE (XNYS) regular-session calendar. All expected sessions are present, including early closes. The original extract contains 2,793 rows; 27 non-session dates were excluded from modelling and logged. Exploratory analysis of the training period (2015–2021) is complete, and the evaluation protocol (models, candidate settings, selection rule and statistical tests) was fixed on the same date, before any model was fitted. Models have been selected on the validation period (2022–2023): ARIMA(1,0,0) and a Random Forest that predicts the next change. On that period all four forecasts are within 0.6% of one another in RMSE. The test period (2024–2025) has not been evaluated, so no out-of-sample performance claims are available.
 
 - [Data documentation and reproduction instructions](data/README.md)
 - [Machine-readable data audit](data/data_audit.json)
 - [Exploratory analysis notebook](notebooks/01_exploratory_analysis.ipynb)
+- [Model selection notebook](notebooks/02_model_selection.ipynb), with the [selected configurations](results/selected_models.json) and [validation errors of every candidate](results/validation_candidates.csv)
 - [Research report draft](report/report_draft.md), including the [evaluation protocol](report/report_draft.md#4-methodology-and-evaluation-protocol)
 - [Opening presentation notes](presentation/speaker_notes.md)
 
-The report and presentation notes describe the research design, completed data preparation and exploratory findings. Modelling and forecast evaluation remain in progress.
+The report describes the research design, data preparation, exploratory findings and model selection. The test evaluation remains to be run.
 
 ## Reproduce data preparation
 
@@ -36,4 +37,15 @@ python -m venv .venv
 
 This re-runs the notebook and rewrites the figures in `report/figures/`. All statistics and diagnostics use the training period only; the full series is plotted once for context.
 
-Fitting the models under the fixed protocol is the next implementation stage. Alongside the naive forecast, ARIMA and Random Forest, the protocol includes a HAR regression as a second linear benchmark.
+## Reproduce the model selection
+
+The forecasting code is in the `vixforecast` package: `features.py` builds inputs from past closes, `models.py` defines the naive, ARIMA, HAR and Random Forest forecasters, and `evaluation.py` runs the walk-forward loop. To run the tests and repeat the selection:
+
+```powershell
+./.venv/Scripts/python.exe -m pytest
+./.venv/Scripts/python.exe -m jupyter nbconvert --to notebook --execute --inplace notebooks/02_model_selection.ipynb
+```
+
+The tests use a synthetic series and need no data files. The notebook takes roughly 15 minutes, uses data up to the end of 2023 only, and rewrites the files in `results/`.
+
+Evaluating the selected models once on the test period is the next implementation stage.
