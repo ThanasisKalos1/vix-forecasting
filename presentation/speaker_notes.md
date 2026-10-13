@@ -13,7 +13,7 @@ Source: Cboe Global Markets, VIX Methodology, https://cdn.cboe.com/api/global/us
 
 ## 4. Daily VIX closes, 2015–2025
 
-Data preparation is complete: 2,766 observations after excluding 27 non-session dates using the frozen NYSE calendar. All expected sessions are present; early closes are retained. The period covers eleven calendar years. Training, validation and test boundaries remain provisional and must be fixed before performance comparison. Descriptive statistical analysis is the next stage. Weekends and non-session holidays are not filled to create a daily calendar.
+Data preparation is complete: 2,766 observations after excluding 27 non-session dates using the frozen NYSE calendar. All expected sessions are present; early closes are retained. The period covers eleven calendar years. Training, validation and test boundaries remain provisional and must be fixed before performance comparison. Exploratory analysis of the training period is complete and documented in the report; model fitting is the next stage. Weekends and non-session holidays are not filled to create a daily calendar.
 
 ## 5. Three methods. A common target.
 Naive forecasting carries the latest close forward. ARIMA combines autoregressive terms, differencing if justified, and moving-average terms based on past innovations. Random Forest averages regression trees trained on lagged values and possibly trailing summaries. Its inputs must explicitly encode historical information. The feature set, orders and hyperparameters have not yet been chosen.
