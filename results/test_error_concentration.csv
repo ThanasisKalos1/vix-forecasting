@@ -1,0 +1,5 @@
+forecast,"RMSE, large-move days","RMSE, other days","MAE, large-move days","MAE, other days",share of squared error from large-move days
+Naive,7.79568,1.086334,6.586154,0.797647,0.73773
+HAR,7.637769,1.08907,6.459804,0.805456,0.72874
+"ARIMA(1,0,0)",7.701464,1.064127,6.522886,0.794271,0.741003
+Random Forest,7.779422,1.067209,6.581893,0.793082,0.743749

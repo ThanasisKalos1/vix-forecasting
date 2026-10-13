@@ -1,7 +1,7 @@
 # Opening presentation — speaker notes
 
 ## 1. One-Day-Ahead VIX Forecasting
-This study asks whether historical VIX observations can help predict its next trading-day closing level. The comparison includes ARIMA, Random Forest and a naive forecast. These are opening proposal slides; the empirical work has not yet been completed.
+This study asks whether historical VIX observations can help predict its next trading-day closing level. The comparison includes ARIMA, Random Forest and a naive forecast. These are the opening proposal slides; the empirical results are in the report.
 
 ## 2. Does complexity improve the forecast?
 The naive forecast uses today's close as tomorrow's prediction. The interesting question is whether the fitted models improve on this simple reference point. Beating ARIMA alone would not establish improvement over the naive model. Any conclusion must be limited to the sample and evaluation procedure.

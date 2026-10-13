@@ -104,7 +104,7 @@ def forest(target, features, min_samples_leaf, split_features):
         min_samples_leaf=min_samples_leaf,
         max_features=1 / 3 if split_features == "third" else 1.0,
         random_state=RANDOM_SEED,
-        n_jobs=-1,
+        n_jobs=1,  # single-threaded: scikit-learn's threaded mode floods the output with warnings
     )
     name = f"RF({target}, {features}, leaf={min_samples_leaf}, split={split_features})"
     return FeatureModel(name, estimator, columns, target=target)

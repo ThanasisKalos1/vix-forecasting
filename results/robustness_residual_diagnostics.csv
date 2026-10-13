@@ -1,0 +1,9 @@
+diagnostic,"ARIMA(1,0,0)",HAR
+"autocorrelation, 5 lags: classical p-value",0.0,0.0
+"autocorrelation, 5 lags: robust p-value",0.195788,0.40829
+"autocorrelation, 10 lags: classical p-value",0.0,0.0
+"autocorrelation, 10 lags: robust p-value",0.004146,0.015018
+share of residual variance explained by 10 lags,0.049417,0.040419
+"ARCH effects, 5 lags: p-value",0.0,0.0
+skewness,3.353117,3.609275
+kurtosis (normal = 3),40.565502,41.219111

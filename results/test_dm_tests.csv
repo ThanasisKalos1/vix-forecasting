@@ -1,0 +1,11 @@
+comparison,loss,mean loss difference,DM statistic,p-value
+"ARIMA(1,0,0) vs Naive",squared error,-0.120903,-1.844388,0.065717
+"ARIMA(1,0,0) vs Naive",absolute error,-0.006478,-0.89237,0.372623
+HAR vs Naive,squared error,-0.120581,-1.004901,0.31543
+HAR vs Naive,absolute error,0.000861,0.072575,0.942174
+Random Forest vs Naive,squared error,-0.052168,-0.943348,0.345958
+Random Forest vs Naive,absolute error,-0.004549,-0.488581,0.625352
+"Random Forest vs ARIMA(1,0,0)",squared error,0.068735,1.688428,0.091951
+"Random Forest vs ARIMA(1,0,0)",absolute error,0.001929,0.330335,0.741285
+Random Forest vs HAR,squared error,0.068413,0.829894,0.406994
+Random Forest vs HAR,absolute error,-0.00541,-0.539109,0.590051

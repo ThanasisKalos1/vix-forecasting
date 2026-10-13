@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 from sklearn.linear_model import LinearRegression
 
-from vixforecast.evaluation import mae, rmse, walk_forward
+from vixforecast.evaluation import clark_west, mae, rmse, walk_forward
 from vixforecast.features import EXTENDED_FEATURES, HAR_FEATURES, make_features
 from vixforecast.models import Arima, FeatureModel, Naive, har
 
@@ -83,6 +83,17 @@ def test_linear_model_gives_same_forecast_for_level_and_change_targets(closes):
     change_model = FeatureModel("HAR change", LinearRegression(), HAR_FEATURES, target="change")
     change = walk_forward(closes, change_model, "2021-06-01", "2021-06-30")
     np.testing.assert_allclose(level.to_numpy(), change.to_numpy(), atol=1e-8)
+
+
+def test_clark_west_detects_a_real_signal_and_ignores_noise():
+    rng = np.random.default_rng(2)
+    signal, noise = rng.normal(0, 0.5, 400), rng.normal(0, 1.0, 400)
+    benchmark = np.full(400, 20.0)
+    actual = benchmark + signal + noise
+    _, p_signal = clark_west(actual, benchmark, benchmark + signal, lags=5)
+    _, p_noise = clark_west(actual, benchmark, benchmark + rng.normal(0, 0.5, 400), lags=5)
+    assert p_signal < 0.01
+    assert p_noise > 0.05
 
 
 def test_metrics_on_known_errors():

@@ -3,7 +3,7 @@
 
 Independent research project
 
-**Working research draft — updated 13 October 2026.** This document contains the research motivation, completed data preparation, exploratory analysis of the training period, the fixed evaluation protocol and model selection on the validation period. The test period has not been evaluated, so no out-of-sample results are available.
+**Working research draft — updated 13 October 2026.** This document contains the research motivation, completed data preparation, exploratory analysis of the training period, the fixed evaluation protocol, model selection on the validation period, the test-period results and exploratory robustness checks. The literature review and abstract remain to be written.
 
 ## 1. Introduction
 
@@ -181,9 +181,135 @@ Each candidate forecast all 501 validation dates under the schedule in Section 4
 
 **Interpretation.** On the validation period the four forecasts are almost indistinguishable: their RMSE values lie within 0.6% of one another. The selected ARIMA and Random Forest configurations were chosen because they had the lowest validation error among 18 and 24 candidates, so their validation errors are optimistic and margins of this size may not persist. No significance test is applied here; testing is reserved for the test period, where the selection is already fixed.
 
-## 6. Remaining report sections
+## 6. Test-period results
 
-The literature review will be developed from verified forecasting and VIX research. Residual diagnostics, test-period results, discussion, conclusion and abstract will be written after the relevant work is completed. No performance claims are available at this stage.
+The naive forecast, the HAR regression and the two selected configurations forecast all 502 test dates under the schedule in Section 4.2. The evaluation followed the protocol without deviation, and no ARIMA re-estimation failed to converge. The code and complete output are in the [test evaluation notebook](../notebooks/03_test_evaluation.ipynb); the tables are also saved in [`results/`](../results).
+
+### 6.1 Accuracy
+
+| Forecast | RMSE | MAE | RMSE relative to naive | MAE relative to naive |
+|---|---|---|---|---|
+| Naive | 2.0656 | 1.0975 | 1.000 | 1.000 |
+| HAR regression | 2.0362 | 1.0983 | 0.986 | 1.001 |
+| ARIMA(1,0,0) | 2.0361 | 1.0910 | 0.986 | 0.994 |
+| Random Forest | 2.0529 | 1.0929 | 0.994 | 0.996 |
+
+All three fitted models have a lower RMSE than the naive forecast, by 1.4% for ARIMA(1,0,0) and HAR and by 0.6% for Random Forest. On MAE the differences are smaller: ARIMA is 0.6% below naive, Random Forest 0.4% below and HAR 0.1% above. Errors are larger than in the validation period for every forecast because the test period contains larger spikes.
+
+### 6.2 Statistical comparison
+
+| Comparison | Loss | Mean loss difference | DM statistic | p-value |
+|---|---|---|---|---|
+| ARIMA(1,0,0) vs naive | squared | −0.121 | −1.84 | 0.066 |
+| ARIMA(1,0,0) vs naive | absolute | −0.006 | −0.89 | 0.373 |
+| HAR vs naive | squared | −0.121 | −1.00 | 0.315 |
+| HAR vs naive | absolute | 0.001 | 0.07 | 0.942 |
+| Random Forest vs naive | squared | −0.052 | −0.94 | 0.346 |
+| Random Forest vs naive | absolute | −0.005 | −0.49 | 0.625 |
+| Random Forest vs ARIMA(1,0,0) | squared | 0.069 | 1.69 | 0.092 |
+| Random Forest vs ARIMA(1,0,0) | absolute | 0.002 | 0.33 | 0.741 |
+| Random Forest vs HAR | squared | 0.068 | 0.83 | 0.407 |
+| Random Forest vs HAR | absolute | −0.005 | −0.54 | 0.590 |
+
+The mean loss difference is the first forecast's average loss minus the second's, so a negative value favours the first. None of the ten tests rejects equal predictive accuracy at the 5% level. The smallest p-values are for ARIMA against naive (0.066) and for Random Forest against ARIMA (0.092, with ARIMA the more accurate), both under squared-error loss. As noted in Section 4.6, the test rejects too rarely for nested models and is imprecise when a few days dominate the loss, so these results show that the forecasts cannot be distinguished on this sample, not that they are equally accurate.
+
+### 6.3 Concentration of errors
+
+| Forecast | RMSE, 26 large-move days | RMSE, other 476 days | MAE, large-move days | MAE, other days | Share of squared error from large-move days |
+|---|---|---|---|---|---|
+| Naive | 7.796 | 1.086 | 6.586 | 0.798 | 73.8% |
+| HAR regression | 7.638 | 1.089 | 6.460 | 0.805 | 72.9% |
+| ARIMA(1,0,0) | 7.701 | 1.064 | 6.523 | 0.794 | 74.1% |
+| Random Forest | 7.779 | 1.067 | 6.582 | 0.793 | 74.4% |
+
+The 26 days with the largest realised moves, each of at least 3.32 points, are 5% of the test period and produce about three quarters of every forecast's squared error. No model anticipates these moves: on those days the four forecasts are within about 2% of one another. The HAR regression's advantage over naive comes entirely from the large-move days; on the remaining days it is slightly less accurate than naive. ARIMA and Random Forest are slightly more accurate than naive in both groups.
+
+![Cumulative squared-error difference from the naive forecast, test period](figures/test_cumulative_squared_error.png)
+
+The figure accumulates each model's squared error minus the naive forecast's. For the first seven months the fitted models are indistinguishable from naive. The gap then opens in a few steps, around 5–6 August 2024, 18–20 December 2024 and 4–9 April 2025. The mechanism is the same each time: every fitted model pulls its forecast slightly towards the usual level of the VIX, which costs accuracy while the VIX is still rising and gains accuracy on the day it falls back. Two days, 6 August 2024 and 9 April 2025, account for most of the gain over the whole period.
+
+### 6.4 Answers to the research questions
+
+**Main question.** Random Forest does not improve one-day-ahead VIX forecasts relative to ARIMA or the naive benchmark in a way this evaluation can distinguish. Its RMSE is 0.6% below naive and 0.8% above ARIMA(1,0,0), and neither difference is statistically significant. The two simple linear models, an autoregression of order one and the HAR regression, were at least as accurate as the Random Forest.
+
+**Secondary question.** Differences in forecast errors are concentrated, not widespread. Five percent of days produce about three quarters of the squared error, and the differences between models arise almost entirely around three episodes of sharp movement in the VIX.
+
+### 6.5 Limitations
+
+- The result comes from a single two-year test window. The fitted models' small advantage depends on how quickly spikes reversed in that window and may not recur.
+- Only the history of the VIX is used. Models with access to other information, such as S&P 500 returns or VIX futures prices, are outside the scope of this study.
+- The comparison covers one-session forecasts of the level. It says nothing about longer horizons or about the direction or size of large moves.
+- Lower error is not evidence of economic value; no trading rule is evaluated.
+- The error variance is not constant and the models do not describe it, so no interval forecasts are provided (Section 7.1).
+- A small amount of dependence remains in the linear models' residuals at lags 6 to 10 (Section 7.1).
+- The Random Forest search covered 24 configurations with one random seed; the conclusion applies to this forest, not to machine-learning methods in general.
+
+## 7. Robustness checks (exploratory)
+
+**These checks were added after the test results were known. They are not part of the pre-specified protocol and do not change the main result.** The models and settings are exactly those of Section 6; nothing was re-tuned. Each check was chosen because its answer affects how the main result should be read. The code and full output are in the [robustness notebook](../notebooks/04_robustness_checks.ipynb).
+
+### 7.1 Residual diagnostics
+
+ARIMA(1,0,0) and HAR were estimated on all closes to the end of 2023 and their in-sample residuals tested. The autocorrelation test is a Breusch–Godfrey test, reported with a classical covariance and with a heteroskedasticity-robust one.
+
+| Diagnostic | ARIMA(1,0,0) | HAR |
+|---|---|---|
+| Autocorrelation, 5 lags: classical p-value | < 0.001 | < 0.001 |
+| Autocorrelation, 5 lags: robust p-value | 0.196 | 0.408 |
+| Autocorrelation, 10 lags: classical p-value | < 0.001 | < 0.001 |
+| Autocorrelation, 10 lags: robust p-value | 0.004 | 0.015 |
+| Share of residual variance explained by 10 lags | 4.9% | 4.0% |
+| ARCH effects, 5 lags: p-value | < 0.001 | < 0.001 |
+| Skewness | 3.35 | 3.61 |
+| Kurtosis (normal = 3) | 40.6 | 41.2 |
+
+The error variance is clearly not constant and the residuals are heavy-tailed, so the classical p-values are unreliable and the robust ones are the ones to read. On those, there is no reliable evidence of leftover dependence at the first five lags, and some at lags 6 to 10, where it is small. The estimated AR(1) coefficient is 0.967, which implies that half of a shock has faded after about 21 sessions.
+
+Three decisions follow. The models are not changed: the leftover structure is weak, re-specifying after the test would break the protocol, and richer ARIMA orders did not forecast better in validation. All inference must be robust to changing variance, which the Diebold–Mariano tests in Section 6 already are. Interval forecasts would require a model of the variance.
+
+### 7.2 Accuracy over nine years
+
+The four forecasters were run over 2017–2025 with the same settings and schedule, using 2015–2016 as the initial estimation sample. The years differ in status: 2017–2021 played no part in selection or testing, although the ARIMA order and Random Forest settings were chosen later; 2022–2023 is the validation period, where the selected settings are favoured by construction; 2024–2025 is the test period.
+
+A decision rule was fixed before these results were computed. An advantage over the naive forecast is called robust only if (1) the pooled Diebold–Mariano test over 2017–2025 rejects equal accuracy at the 5% level under squared-error loss, and (2) the model has a lower RMSE than naive in at least 8 of the 9 years, the minimum for a two-sided sign test to reject at 5%.
+
+![RMSE relative to the naive forecast, by calendar year](figures/robustness_rmse_by_year.png)
+
+| Forecast | Years with lower RMSE than naive | Sign test p-value | Pooled RMSE relative to naive | DM p-value, squared error | Pooled MAE relative to naive | DM p-value, absolute error |
+|---|---|---|---|---|---|---|
+| HAR regression | 7 of 9 | 0.180 | 0.997 | 0.740 | 0.980 | 0.005 |
+| ARIMA(1,0,0) | 7 of 9 | 0.180 | 0.995 | 0.557 | 0.985 | 0.014 |
+| Random Forest | 6 of 9 | 0.508 | 0.997 | 0.379 | 0.992 | 0.092 |
+
+No model meets either condition, so a robust RMSE advantage over the naive forecast is not established. Over nine years the RMSE advantage is 0.3% to 0.5%, against 0.6% to 1.4% in the test period, which was therefore at the favourable end. All three models were worse than naive in 2017, the calmest year, and in 2020, the most volatile.
+
+Under absolute-error loss, HAR's MAE is 2.0% below naive and ARIMA's 1.5% below. This comparison was not part of the decision rule. Six pooled tests were run on this sample; with a Bonferroni threshold of 0.0083, only HAR's advantage remains significant. It suggests that HAR is slightly more accurate than naive on ordinary days, while the large-error days that dominate RMSE show no reliable difference.
+
+### 7.3 Evidence of mean reversion
+
+The Diebold–Mariano test compares forecasts as actually produced, including the noise from estimating parameters. The Clark–West test [7] asks instead whether a larger model contains any true predictive content beyond a benchmark nested in it. It was applied to the two linear models, of which the naive forecast is a special case.
+
+| Sample | HAR: one-sided p-value | ARIMA(1,0,0): one-sided p-value |
+|---|---|---|
+| 2024–2025 (test) | 0.059 | 0.019 |
+| 2017–2025 | 0.004 | 0.008 |
+| 2017–2021 | 0.029 | 0.041 |
+
+The longer samples reject for both models: the VIX does revert towards its usual level, in agreement with the ADF test in Section 3. If the VIX were a random walk, the regressors of these models would be non-stationary, which the standard theory of this test does not cover, so the p-values are indicative.
+
+Read with Section 7.2, the conclusion is that the signal is real but small. Once the cost of estimating parameters is included, it does not produce a reliably lower RMSE than carrying today's close forward.
+
+### 7.4 Bias
+
+Over 2017–2025 no forecast has a mean error significantly different from zero (p-values of 0.12 or higher, with Newey–West standard errors). The shifting average level suggested by the KPSS test in Section 3 does not show up as bias.
+
+### 7.5 Effect on the conclusions
+
+The answer to the main research question is unchanged and better supported. Random Forest does not improve on ARIMA or the naive forecast; across nine years it beats naive in the fewest years and has the smallest MAE improvement of the three fitted models. The finding that HAR has a small MAE advantage is exploratory and would need confirmation on new data.
+
+## 8. Remaining report sections
+
+The literature review will be developed from verified forecasting and VIX research. A fuller discussion and the abstract remain to be written.
 
 ## References
 
@@ -208,4 +334,6 @@ The literature review will be developed from verified forecasting and VIX resear
 - 13 October: completed exploratory analysis of the training period (levels, daily changes, stationarity tests, autocorrelation).
 - 13 October: fixed the evaluation protocol (models, candidate settings, re-estimation schedule, selection rule and statistical comparison) before fitting any model.
 - 13 October: evaluated all ARIMA and Random Forest candidates on the validation period and fixed the selected configurations.
-- Pending: test evaluation, statistical comparison, error-concentration analysis and literature review.
+- 13 October: ran the test evaluation once under the fixed protocol, with the statistical comparison and error-concentration analysis.
+- 13 October: added exploratory robustness checks (residual diagnostics, nine-year comparison, Clark–West test, bias).
+- Pending: literature review and abstract.
