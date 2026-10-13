@@ -4,12 +4,12 @@ An independent research project comparing ARIMA, Random Forest and a naive bench
 
 ## Current status
 
-Data downloaded from Cboe and reconciled on 13 October 2026: 2,766 observations, 2015-01-02 to 2025-12-31, matching the frozen NYSE (XNYS) regular-session calendar. All expected sessions are present, including early closes. The original extract contains 2,793 rows; 27 non-session dates were excluded from modelling and logged. Exploratory analysis of the training period (2015–2021) is complete. No models have been fitted and no forecast performance claims are available.
+Data downloaded from Cboe and reconciled on 13 October 2026: 2,766 observations, 2015-01-02 to 2025-12-31, matching the frozen NYSE (XNYS) regular-session calendar. All expected sessions are present, including early closes. The original extract contains 2,793 rows; 27 non-session dates were excluded from modelling and logged. Exploratory analysis of the training period (2015–2021) is complete, and the evaluation protocol (models, candidate settings, selection rule and statistical tests) was fixed on the same date, before any model was fitted. No models have been fitted and no forecast performance claims are available.
 
 - [Data documentation and reproduction instructions](data/README.md)
 - [Machine-readable data audit](data/data_audit.json)
 - [Exploratory analysis notebook](notebooks/01_exploratory_analysis.ipynb)
-- [Research proposal draft](report/report_draft.md)
+- [Research report draft](report/report_draft.md), including the [evaluation protocol](report/report_draft.md#4-methodology-and-evaluation-protocol)
 - [Opening presentation notes](presentation/speaker_notes.md)
 
 The report and presentation notes describe the research design, completed data preparation and exploratory findings. Modelling and forecast evaluation remain in progress.
@@ -36,4 +36,4 @@ python -m venv .venv
 
 This re-runs the notebook and rewrites the figures in `report/figures/`. All statistics and diagnostics use the training period only; the full series is plotted once for context.
 
-Fixing the evaluation protocol and fitting the models are the next implementation stage.
+Fitting the models under the fixed protocol is the next implementation stage. Alongside the naive forecast, ARIMA and Random Forest, the protocol includes a HAR regression as a second linear benchmark.
