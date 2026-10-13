@@ -1,9 +1,9 @@
 # One-Day-Ahead VIX Forecasting
 ## Comparing ARIMA, Random Forest and a Naive Benchmark
 
-University of Cyprus · MSc Data Science · Time Series Analysis
+Independent research project
 
-**Working research draft — 8 October 2026.** This document contains the opening and proposed methodology. No dataset has been inspected and no empirical results are available. The final presentation is due 30 November 2026.
+**Working research draft — updated 13 October 2026.** This document contains the research motivation, completed data preparation and proposed methodology. No models have been fitted and no forecast results are available.
 
 ## 1. Introduction
 
@@ -17,11 +17,11 @@ The intended contribution is a transparent forecasting comparison with chronolog
 
 ## 2. Index and proposed sample
 
-**Data update — 13 October 2026:** The Cboe source has now been downloaded and reconciled to a frozen NYSE regular-session calendar (XNYS, exchange_calendars 4.13.2). The modelling sample has 2,766 observations from 2 January 2015 to 31 December 2025. The original date-range extract has 2,793 observations; 27 non-session dates were excluded and logged. All expected regular-session dates are present, including early closes. No values were imputed or modified. The proposal text below describes the earlier planning stage; data documentation and the audit provide the current verified status. Forecasts target the next regular-session date and are issued only after the preceding Cboe closing value is available.
+The Cboe source has been downloaded and reconciled to a frozen NYSE regular-session calendar (XNYS, exchange_calendars 4.13.2). The modelling sample has 2,766 observations from 2 January 2015 to 31 December 2025. The original date-range extract has 2,793 observations; 27 non-session dates were excluded and logged. All expected regular-session dates are present, including early closes. No values were imputed or modified. Forecasts target the next regular-session date and are issued only after the preceding Cboe closing value is available. Source details, reproduction instructions and validation results are recorded in the [data documentation](../data/README.md).
 
-The proposed dataset consists of daily VIX index closing observations from 1 January 2015 to 31 December 2025, retaining the available trading-day observations within those dates. The target is the VIX index itself, rather than a VIX futures contract or an exchange-traded product. Weekends and market holidays are not extra forecasting steps. Missing observations within the trading calendar will be investigated rather than automatically filled.
+The target is the VIX index itself, rather than a VIX futures contract or an exchange-traded product. Weekends and non-session holidays are not extra forecasting steps. The preparation script checks for missing expected sessions and stops rather than filling them automatically.
 
-The sample spans eleven calendar years and predates the project. Its inclusion of the COVID-19 period provides a reason to investigate unusual observations and changing forecasting conditions; it does not establish robustness across all market conditions. Exact coverage, observation counts, source provenance and data quality remain to be verified. The Cboe methodology cited here is a definition source, not evidence that the historical dataset has already been downloaded.
+The sample spans eleven calendar years and predates the project. Its inclusion of the COVID-19 period provides a reason to investigate unusual observations and changing forecasting conditions; it does not establish robustness across all market conditions. Structural data checks are complete; statistical exploration and model diagnostics remain to be conducted.
 
 The provisional chronological split is:
 
@@ -71,5 +71,5 @@ The literature review will be developed from verified forecasting and VIX resear
 ## Progress log
 
 - 8 October: research question, opening text, sample proposal and model comparison drafted.
-- Pending: confirm assessment requirements, obtain and inspect data, verify methodological literature, and finalise the evaluation protocol.
-- Priority: complete analysis with time left for the mandatory presentation and rehearsal before 30 November.
+- 13 October: downloaded the source data, validated values and reconciled the sample to regular US equity sessions.
+- Pending: exploratory analysis, verification of methodological literature, and finalisation of the evaluation protocol.
